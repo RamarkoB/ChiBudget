@@ -11,8 +11,8 @@ type BudgetComparison = {
 type ComparisonMatch = {
     deptNum: string;
     appropriationAccount: string;
-    fundCode: string;
     fundType: string;
+    fundCode: string;
     amount: number;
 };
 
@@ -20,6 +20,11 @@ type ComparisonData = {
     fst: ComparisonMatch[];
     snd: ComparisonMatch[];
     indices: Set<Omit<ComparisonMatch, 'deptNum' | 'amount'>>;
+};
+
+type ComparisonRow = {
+    appropriationAccount: string;
+    fundTypes: { fundType: string; fundCodes: { fundCode: string; fst: number; snd: number }[] }[];
 };
 
 const moneyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
@@ -66,9 +71,10 @@ const createTableHeader = () => {
     return tableHeader;
 };
 
-const createTableCell = (value: string) => {
+const createTableCell = (value: string, rowspan?: number) => {
     const cell = document.createElement('td');
     cell.innerText = value;
+    if (rowspan) cell.rowSpan = rowspan;
     return cell;
 };
 
@@ -81,20 +87,67 @@ const createCompareTable = (
     if (!compareTable) return;
 
     const comparisonData = getComparisons(budgetData, fundsDict, selectedComparison);
-    const tableRows = [...comparisonData.indices].map((index) => {
-        const tableRow = document.createElement('tr');
 
-        const account = createTableCell(index.appropriationAccount);
-        const fundType = createTableCell(index.fundType);
-        const fundCode = createTableCell(index.fundCode);
-        const fstMatch = createTableCell(moneyFormatter.format(findComparisonMatch(comparisonData.fst, index)));
-        const sndMatch = createTableCell(moneyFormatter.format(findComparisonMatch(comparisonData.snd, index)));
+    const tableHeader = createTableHeader();
+    const tableRows = [...comparisonData.indices].reduce<ComparisonRow[]>((acc, index) => {
+        const lastAccount = acc.at(-1);
+        if (!lastAccount || index.appropriationAccount !== lastAccount.appropriationAccount) {
+            acc.push({
+                appropriationAccount: index.appropriationAccount,
+                fundTypes: [{
+                    fundType: index.fundType,
+                    fundCodes: [{
+                        fundCode: index.fundCode,
+                        fst: findComparisonMatch(comparisonData.fst, index),
+                        snd: findComparisonMatch(comparisonData.snd, index),
+                    }],
+                }],
+            });
+            return acc;
+        }
 
-        tableRow.append(account, fundType, fundCode, fstMatch, sndMatch);
-        return tableRow;
+        const lastFundType = lastAccount?.fundTypes.at(-1);
+        if (!lastFundType || lastFundType.fundType !== index.fundType) {
+            lastAccount?.fundTypes.push({
+                fundType: index.fundType,
+                fundCodes: [{
+                    fundCode: index.fundCode,
+                    fst: findComparisonMatch(comparisonData.fst, index),
+                    snd: findComparisonMatch(comparisonData.snd, index),
+                }],
+            });
+            return acc;
+        }
+
+        lastFundType?.fundCodes.push({
+            fundCode: index.fundCode,
+            fst: findComparisonMatch(comparisonData.fst, index),
+            snd: findComparisonMatch(comparisonData.snd, index),
+        });
+        return acc;
+    }, []).flatMap(({ appropriationAccount, fundTypes }) => {
+        const fundTypesLength = fundTypes.reduce((acc, { fundCodes }) => acc + fundCodes.length, 0);
+        return fundTypes.flatMap(({ fundType, fundCodes }, fundTypeIndex) => {
+            const fundCodesLength = fundCodes.length;
+            return fundCodes.map(({ fundCode, fst, snd }, fundCodeIndex) => {
+                const tableRow = document.createElement('tr');
+
+                if (fundTypeIndex === 0 && fundCodeIndex === 0) {
+                    tableRow.appendChild(createTableCell(appropriationAccount, fundTypesLength));
+                }
+                if (fundCodeIndex === 0) tableRow.appendChild(createTableCell(fundType, fundCodesLength));
+
+                const fundCodeCell = createTableCell(fundCode);
+                const fstCell = createTableCell(moneyFormatter.format(fst));
+                const sndCell = createTableCell(moneyFormatter.format(snd));
+
+                tableRow.append(fundCodeCell, fstCell, sndCell);
+                return tableRow;
+            });
+        });
     });
 
-    compareTable.replaceChildren(createTableHeader(), ...tableRows);
+    compareTable.replaceChildren(tableHeader, ...tableRows);
 };
 
 export default createCompareTable;
