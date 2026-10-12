@@ -1,7 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html>
     <head>
+        <title>Chicago Budget Dashboard</title>
+        <meta property="og:type" content="website" />
+        <meta name="Chicago Budget Dashboard" content="A Dashboard for the Chicago Budget" />
+        <meta name="twitter:title" content="Chicago Budget Dashboard" />
+        <!-- <meta name="twitter:image" content="assets/img/Logo.png" />
+        <meta property="og:image" content="assets/img/Logo.png" />
+        <link rel="icon" type="image/png" sizes="720x720" href="Logo.png" />
+        <link rel="”apple-touch-icon”" type="image/png" href="Logo.png" />
+        <link rel="shortcut icon" type="image/png" href="Logo.png" /> -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
+        <link href="styles.css" rel="stylesheet" />
         <script src="main.js" defer></script>
     </head>
 
@@ -12,5 +28,26 @@
     </div>
 
     <div id="timeSeries"></div>
+
+    <div id="compareSelectors">
+        <div class="selectorWrapper">
+            <p>Selection One</p>
+            <div>
+                <select id="compareDept1"></select>
+                <select id="compareYear1"></select>
+            </div>
+        </div>
+
+        <div class="selectorWrapper">
+            <p>Selection Two</p>
+            <div>
+                <select id="compareDept2"></select>
+                <select id="compareYear2"></select>
+            </div>
+        </div>
+    </div>
+
+    <table id="compareTable"></table>
+
     <div id="sankey"></div>
 </html>

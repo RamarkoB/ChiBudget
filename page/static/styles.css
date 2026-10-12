@@ -1,0 +1,42 @@
+:root {
+    font-family: 'Jost', sans-serif;
+}
+
+select {
+    font-family: 'Jost', sans-serif;
+}
+
+svg text {
+    font-family: 'Jost', sans-serif;
+}
+
+#compareSelectors {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.selectorWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selectorWrapper p {
+    margin: 0;
+    font-weight: bold;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(odd) {
+    background-color: #ebedee;
+}

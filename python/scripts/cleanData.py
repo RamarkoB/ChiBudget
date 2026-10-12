@@ -475,22 +475,23 @@ def cleanData():
             [
                 "deptNum",
                 "fundCode",
+                "fundType",
                 "appropriationAccount",
                 "appropriationAuthority",
             ]
         ]
         .value_counts()
         .to_frame()
-        .drop(["count"], axis=1)
         .reset_index()
         .sort_values(
             by=[
                 "deptNum",
-                "fundCode",
                 "appropriationAccount",
-                "appropriationAuthority",
+                "fundType",
+                "fundCode",
             ]
         )
+        .drop(["count", "fundType"], axis=1)
     )
 
     # create ordinance table (Takes approx. 2 min)

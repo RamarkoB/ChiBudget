@@ -4,6 +4,7 @@
 - Budget Publications: https://www.chicago.gov/city/en/depts/obm/provdrs/budget/svcs/BudgetPublications.html
 -Information from the Office of the Inspector General: https://igchicago.org/information-portal/data-dashboards/city-budget-by-departments/
 - Info from 2026 Budget Breakdown: https://public.tableau.com/app/profile/obm.data.analytics/viz/CityofChicago-BudgetataGlance/ChicagoBudgetataGlance?publish=yes
+- FY Budget Ordinance Dashboard: https://www.chicago.gov/city/en/depts/cofa/supp_info/COFAdata/2026BudgetOrdinance.html
 
 # Definitions
 

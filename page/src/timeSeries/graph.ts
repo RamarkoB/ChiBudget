@@ -2,12 +2,12 @@
 import * as d3 from 'npm:d3';
 
 // internal imports
-import { BudgetData, DeptData, FundsData } from './types.ts';
-import { getDict, years } from './utils.ts';
+import { BudgetData, DeptData, FileDict, FundsData } from '../lib/types.ts';
+import { years } from '../lib/utils.ts';
 
 const createBudgetGraph = (
     budgetData: BudgetData[],
-    fundsDict: Record<string, Omit<FundsData, 'id'>>,
+    fundsDict: FileDict<FundsData>,
 ) => {
     // Declare the chart dimensions and margins.
     const width = 640;
@@ -20,9 +20,9 @@ const createBudgetGraph = (
     const budgets = years.flatMap((year) => {
         const { local, grants } = budgetData.reduce(
             (acc, row) =>
-                fundsDict[row.fundCode].type === 'LOCAL' ?
-                    { grants: acc.grants, local: acc.local + row[year] }
-                :   { grants: acc.grants + row[year], local: acc.local },
+                fundsDict[row.fundCode].type === 'LOCAL'
+                    ? { grants: acc.grants, local: acc.local + row[year] }
+                    : { grants: acc.grants + row[year], local: acc.local },
             { local: 0, grants: 0 },
         );
 
@@ -56,12 +56,12 @@ const createBudgetGraph = (
         .stack()
         .keys(['local', 'grants'])
         .value(([, group], key) => group.get(key).value)(
-        d3.index(
-            budgetsTidy,
-            (d) => d.year,
-            (d) => d.type,
-        ),
-    );
+            d3.index(
+                budgetsTidy,
+                (d) => d.year,
+                (d) => d.type,
+            ),
+        );
 
     const color = d3
         .scaleOrdinal()
@@ -114,22 +114,15 @@ const createBudgetGraph = (
 const graphBudget = (
     timeSeries: HTMLElement,
     budgetData: BudgetData[],
-    deptsDict: Record<string, Omit<DeptData, 'id'>>,
-    fundsDict: Record<string, Omit<FundsData, 'id'>>,
+    deptsDict: FileDict<DeptData>,
+    fundsDict: FileDict<FundsData>,
     options: { category: string; department: string },
 ) => {
-    const data =
-        options.category === 'All' && options.department === 'All' ? budgetData
-        : options.category !== 'All' ?
-            budgetData.filter((row) => {
-                return (
-                    deptsDict[row.departmentNumber].category ===
-                    options.category
-                );
-            })
-        :   budgetData.filter(
-                (row) => row.departmentNumber === options.department,
-            );
+    const data = options.category === 'All' && options.department === 'All'
+        ? budgetData
+        : options.category !== 'All'
+        ? budgetData.filter((row) => deptsDict[row.deptNum].category === options.category)
+        : budgetData.filter((row) => row.deptNum === options.department);
 
     const budgetNode = createBudgetGraph(data, fundsDict);
     if (!budgetNode) return;

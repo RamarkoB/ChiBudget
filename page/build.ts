@@ -1,5 +1,4 @@
 import * as esbuild from 'npm:esbuild';
-import { copyFile } from 'node:fs/promises';
 import { denoPlugin } from 'jsr:@deno/esbuild-plugin';
 import { copy } from 'jsr:@std/fs/copy';
 
@@ -15,9 +14,8 @@ await esbuild.build({
     plugins: [denoPlugin()],
 });
 
-// Copy index.html to dist directory
-await copyFile('./static/index.html', './dist/index.html');
-// await copyFile('./static/styles.css', './dist/styles.css');
+// Copy files to dist directory
+await copy('./static/', './dist', { overwrite: true });
 await copy('../data/', './dist/data', { overwrite: true });
 
 esbuild.stop();

@@ -1,12 +1,11 @@
 type DataFileName = 'ordinance' | 'depts' | 'funds';
 
-type DataOfFile<T extends DataFileName> =
-    T extends 'ordinance' ? BudgetData
+type DataOfFile<T extends DataFileName> = T extends 'ordinance' ? BudgetData
     : T extends 'depts' ? DeptData
     : FundsData;
 
 type BudgetData = {
-    departmentNumber: string;
+    deptNum: string;
     fundCode: string;
     appropriationAccount: string;
     appropriationAuthority: string;
@@ -31,4 +30,6 @@ type BudgetData = {
 type DeptData = { id: string; name: string; category: string };
 type FundsData = { id: string; name: string; type: string };
 
-export type { DataFileName, DataOfFile, BudgetData, DeptData, FundsData };
+type FileDict<T extends DeptData | FundsData> = Record<string, Omit<T, 'id'>>;
+
+export type { BudgetData, DataFileName, DataOfFile, DeptData, FileDict, FundsData };

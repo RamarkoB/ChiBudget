@@ -3,6 +3,11 @@
         "build": "deno run -A build.ts",
         "dev": "deno run -A --watch=src/,static/,../data/ ./build.ts"
     },
+    "fmt": {
+        "lineWidth": 140,
+        "indentWidth": 4,
+        "singleQuote": true
+    },
     "imports": {
         "@deno/esbuild-plugin": "jsr:@deno/esbuild-plugin@^1.2.1",
         "@std/assert": "jsr:@std/assert@1",
