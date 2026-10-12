@@ -9,17 +9,10 @@ const initAnnualTrends = (
     fundsDict: FileDict<FundsData>,
     categories: string[],
 ) => {
-    console.log('Initalizing Annual Trends');
-    const categorySelector = document
-        .getElementsByTagName('select')
-        .namedItem('categories');
-    const deptSelector = document
-        .getElementsByTagName('select')
-        .namedItem('departments');
-    if (!categorySelector || !deptSelector) return;
-
+    const categorySelector = document.getElementsByTagName('select').namedItem('categories');
+    const deptSelector = document.getElementsByTagName('select').namedItem('departments');
     const annualTrends = document.getElementById('annualTrendsGraph');
-    if (!annualTrends) return;
+    if (!categorySelector || !deptSelector || !annualTrends) return;
 
     appendOption(categorySelector, 'All', 'All');
     categories.forEach((category) => appendOption(categorySelector, category, category));

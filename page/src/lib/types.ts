@@ -6,9 +6,8 @@ type DataOfFile<T extends DataFileName> = T extends 'ordinance' ? BudgetData
 
 type BudgetData = {
     deptNum: string;
-    fundCode: string;
     appropriationAccount: string;
-    appropriationAuthority: string;
+    fundCode: string;
     2011: number;
     2012: number;
     2013: number;

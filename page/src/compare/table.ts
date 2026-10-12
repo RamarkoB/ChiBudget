@@ -11,7 +11,6 @@ type BudgetComparison = {
 type ComparisonMatch = {
     deptNum: string;
     appropriationAccount: string;
-    appropriationAuthority: string;
     fundCode: string;
     fundType: string;
     amount: number;
@@ -35,14 +34,9 @@ const getComparisons = (
         const sndMatch = row.deptNum == sndDept && row[sndYear] !== 0;
         if (!fstMatch && !sndMatch) return acc;
 
-        const index = {
-            appropriationAccount: row.appropriationAccount,
-            fundCode: row.fundCode,
-            fundType: fundsDict[row.fundCode].type,
-            appropriationAuthority: row.appropriationAuthority,
-        };
-
+        const index = { appropriationAccount: row.appropriationAccount, fundCode: row.fundCode, fundType: fundsDict[row.fundCode].type };
         acc.indices.add(index);
+
         if (fstMatch) acc.fst.push({ ...index, deptNum: fstDept, amount: row[fstYear] });
         if (sndMatch) acc.snd.push({ ...index, deptNum: sndDept, amount: row[sndYear] });
         return acc;
@@ -56,15 +50,14 @@ const findComparisonMatch = (
 ) => {
     return matches.find((match) =>
         match.fundCode === index.fundCode &&
-        match.appropriationAccount === index.appropriationAccount &&
-        match.appropriationAuthority === index.appropriationAuthority
+        match.appropriationAccount === index.appropriationAccount
     )?.amount ?? 0;
 };
 
 const createTableHeader = () => {
     const tableHeader = document.createElement('tr');
 
-    ['Appropriation Account', 'Fund Type', 'Fund Code', 'Appropriation Authority', 'Selection One', 'Selection Two'].forEach((value) => {
+    ['Appropriation Account', 'Fund Type', 'Fund Code', 'Selection One', 'Selection Two'].forEach((value) => {
         const cell = document.createElement('th');
         cell.innerText = value;
         tableHeader.appendChild(cell);
@@ -94,11 +87,10 @@ const createCompareTable = (
         const account = createTableCell(index.appropriationAccount);
         const fundType = createTableCell(index.fundType);
         const fundCode = createTableCell(index.fundCode);
-        const authority = createTableCell(index.appropriationAuthority);
         const fstMatch = createTableCell(moneyFormatter.format(findComparisonMatch(comparisonData.fst, index)));
         const sndMatch = createTableCell(moneyFormatter.format(findComparisonMatch(comparisonData.snd, index)));
 
-        tableRow.append(account, fundType, fundCode, authority, fstMatch, sndMatch);
+        tableRow.append(account, fundType, fundCode, fstMatch, sndMatch);
         return tableRow;
     });
 

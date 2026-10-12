@@ -4,7 +4,7 @@ import math
 from pathlib import Path
 
 # labels
-categories = {
+deptCategories = {
     "City Development": ["21", "23", "54"],
     "Infrastructure Services": ["81", "84", "85", "88"],
     "Community Services": ["41", "45", "48", "50", "91", "32"],
@@ -76,6 +76,27 @@ depts = [
     "88 - WATER MANAGEMENT",
     "91 - PUBLIC LIBRARY",
     "99 - FINANCE GENERAL",
+]
+
+accountCategories = [
+    "0000 - Personnel Services",
+    "0100 - Contractual Services",
+    "0200 - Travel",
+    "0300 - Commodities and Materials",
+    "0400 - Equipment",
+    "0500 - Permanent Improvements",
+    "0700 - Contingencies",
+    "0800 - Indirect Costs",
+    "0900 - Financial Purposes as Specified",
+    "9000 - Purposes as Specified",
+    "9100 - Purposes as Specified",
+    "9200 - Purposes as Specified",
+    "9300 - Financial Purposes as Specified",
+    "9400 - Transfers and Reimbursements",
+    "9600 - Transfers and Reimbursements",
+    "9700 - Transfers and Reimbursements",
+    "9800 - Special Events Projects",
+    "9900 - Pension Purposes as Specified"
 ]
 
 accounts = [
@@ -388,7 +409,6 @@ replacements = [
     [" With ", " with "],
 ]
 
-
 ## helper functions
 def getRowAmount(row):
     if not pd.isna(row["_ordinance_amount_"]):
@@ -397,7 +417,6 @@ def getRowAmount(row):
         return row["appropriation_ordinance"]
     else:
         return row["amount"]
-
 
 def fmtCode(code, length, withInt=False):
     if isinstance(code, float) and math.isnan(code):
@@ -408,25 +427,21 @@ def fmtCode(code, length, withInt=False):
         return "0" * (length - len(str(int(code)))) + str(int(code))
     return "0" * (length - len(str(code))) + str(code)
 
-
-def getValues(df, x):
+def getValues(df, row):
     subset = df[
-        (df["deptNum"] == x["deptNum"])
-        & (df["fundCode"] == x["fundCode"])
-        & (df["appropriationAccount"] == x["appropriationAccount"])
-        & (df["appropriationAuthority"] == x["appropriationAuthority"])
+        (df["deptNum"] == row["deptNum"])
+        & (df["fundCode"] == row["fundCode"])
+        & (df["appropriationAccount"] == row["appropriationAccount"])
     ]
     values = subset[["amount"]].T
     values.columns = subset["year"].tolist()
-    return values.T["amount"]
-
+    return values.T.groupby(values.T.index).sum()["amount"]
 
 def cleanTitle(row):
     row = row.title()
     for replacement in replacements:
         row = row.replace(*replacement)
     return row
-
 
 def makeSeries(ls, columns, titleCase=False):
     df = pd.DataFrame(ls).sort_values(by=[0])
@@ -438,15 +453,20 @@ def makeSeries(ls, columns, titleCase=False):
         series = series.apply(cleanTitle)
     return series
 
-
 def splitSeries(ls, columns, titleCase=False):
     return makeSeries(list(map(lambda x: x.split(" - ", 1), ls)), columns, titleCase)
 
+def getCategoryNumber(categorySeries, x):
+    if not x.isdigit(): return x
+    
+    index = fmtCode(int(x) - int(x) % 100, 4)
+    category = categorySeries[categorySeries.index == index].iloc[0]
+    return f"{category.name} - {category["categoryName"]}"
 
-def makeCSV(dfOrSeries, name, index=True):
-    dfOrSeries.to_csv(f"./data/{name}.csv", index=index)
+def makeCSV(df, name, index=True):
+    df.to_csv(f"./data/{name}.csv", index=index)
 
-
+# main function
 def cleanData():
     Path("./data").mkdir(parents=True, exist_ok=True)
     df = pd.DataFrame()
@@ -460,12 +480,8 @@ def cleanData():
     df["amount"] = df.apply(getRowAmount, axis=1)
     df["fundCode"] = df["fund_code"].apply(lambda x: fmtCode(x, 4))
     df["deptNum"] = df["department_number"].apply(lambda x: fmtCode(x, 2))
-    df["appropriationAccount"] = df["appropriation_account"].apply(
-        lambda x: fmtCode(x, 4)
-    )
-    df["appropriationAuthority"] = df["appropriation_authority"].apply(
-        lambda x: fmtCode(x, 4, True)
-    )
+    df["appropriationAccount"] = df["appropriation_account"].apply(lambda x: fmtCode(x, 4))
+    df["appropriationAuthority"] = df["appropriation_authority"].apply(lambda x: fmtCode(x, 4, True))
     df["fundDescription"] = df["fund_description"].str.upper()
     df["fundType"] = df["fund_type"].str.upper()
 
@@ -474,10 +490,9 @@ def cleanData():
         df[
             [
                 "deptNum",
-                "fundCode",
-                "fundType",
                 "appropriationAccount",
-                "appropriationAuthority",
+                "fundType",
+                "fundCode"
             ]
         ]
         .value_counts()
@@ -497,9 +512,7 @@ def cleanData():
     # create ordinance table (Takes approx. 2 min)
     print("   Creating Ordinance Table...")
     ordinanceDF = cleanedDF.merge(
-        cleanedDF.apply(
-            lambda row: getValues(df, row), axis=1, result_type="expand"
-        ).fillna(0),
+        cleanedDF.apply(lambda row: getValues(df, row), axis=1, result_type="expand").fillna(0),
         left_index=True,
         right_index=True,
     )
@@ -507,17 +520,19 @@ def cleanData():
 
     # match catories to id keys
     categoryMatches = []
-    for key, value in categories.items():
+    for key, value in deptCategories.items():
         for code in value:
             categoryMatches.append([code, key])
-
-    accountsSeries = splitSeries(accounts, ["accountNum", "accountName"])
-    deptNameSeries = splitSeries(depts, ["deptNum", "deptName"], True)
+            
     categorySeries = makeSeries(categoryMatches, ["deptNum", "category"])
+    deptNameSeries = splitSeries(depts, ["deptNum", "deptName"], True)
     deptsDF = pd.concat([deptNameSeries, categorySeries], axis=1)
 
-    fundsSeries = splitSeries(fundsCodes, ["fundNum", "fundName"])
-    fundTypes = (
+    accountCategoriesSeries = splitSeries(accountCategories, ["categoryNum", "categoryName"]).to_frame()
+    accountsDF = splitSeries(accounts, ["accountNum", "accountName"]).to_frame()
+    accountsDF["category"] = accountsDF.index.map(lambda x: getCategoryNumber(accountCategoriesSeries, x))
+
+    fundsDF = (
         df[["fundType", "fundCode"]]
         .value_counts()
         .to_frame()
@@ -526,9 +541,7 @@ def cleanData():
         .sort_values(by=["fundCode"])
         .set_index("fundCode")
     )
-
-    fundsDF = pd.concat([fundsSeries, fundTypes], axis=1)
-    fundsDF.index.name = "fundNum"
+    fundsDF["fundName"] = splitSeries(fundsCodes, ["fundNum", "fundName"])
     fundsDF["fundName"] = fundsDF.apply(
         lambda row: (
             df[df["fundCode"] == row.name].iloc[0]["fundDescription"]
@@ -537,8 +550,9 @@ def cleanData():
         ),
         axis=1,
     )
+    fundsDF = fundsDF[["fundName", "fundType"]]
 
     makeCSV(ordinanceDF, "ordinance", False)
-    makeCSV(accountsSeries, "accounts")
+    makeCSV(accountsDF, "accounts")
     makeCSV(deptsDF, "depts")
     makeCSV(fundsDF, "funds")
