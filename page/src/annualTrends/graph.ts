@@ -118,6 +118,7 @@ const graphAnnualTrends = (
     fundsDict: FileDict<FundsData>,
     options: { category: string; department: string },
 ) => {
+    console.log('Graphing Annual Trends');
     const data = options.category === 'All' && options.department === 'All'
         ? budgetData
         : options.category !== 'All'

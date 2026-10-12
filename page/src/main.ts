@@ -1,6 +1,6 @@
-import initCompare from './compare/index.ts';
 import { getDict, getUnique, importData } from './lib/utils.ts';
 import initAnnualTrends from './annualTrends/index.ts';
+import initCompare from './compare/index.ts';
 
 const main = async () => {
     const budgetData = await importData('ordinance');

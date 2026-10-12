@@ -9,6 +9,7 @@ const initAnnualTrends = (
     fundsDict: FileDict<FundsData>,
     categories: string[],
 ) => {
+    console.log('Initalizing Annual Trends');
     const categorySelector = document
         .getElementsByTagName('select')
         .namedItem('categories');
@@ -31,17 +32,11 @@ const initAnnualTrends = (
     deptsData.forEach((dept) => appendOption(deptSelector, `${dept.id} - ${dept.name}`, dept.id));
 
     deptSelector.addEventListener('change', () => {
-        graphAnnualTrends(annualTrends, budgetData, deptsDict, fundsDict, {
-            category: 'All',
-            department: deptSelector?.value,
-        });
+        graphAnnualTrends(annualTrends, budgetData, deptsDict, fundsDict, { category: 'All', department: deptSelector?.value });
         categorySelector.value = 'All';
     });
 
-    graphAnnualTrends(annualTrends, budgetData, deptsDict, fundsDict, {
-        category: 'All',
-        department: 'All',
-    });
+    graphAnnualTrends(annualTrends, budgetData, deptsDict, fundsDict, { category: 'All', department: 'All' });
 };
 
 export default initAnnualTrends;
