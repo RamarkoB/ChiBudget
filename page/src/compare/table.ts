@@ -23,6 +23,8 @@ type ComparisonData = {
     indices: Set<Omit<ComparisonMatch, 'deptNum' | 'amount'>>;
 };
 
+const moneyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
 const getComparisons = (
     budgetData: BudgetData[],
     fundsDict: FileDict<FundsData>,
@@ -93,8 +95,8 @@ const createCompareTable = (
         const fundType = createTableCell(index.fundType);
         const fundCode = createTableCell(index.fundCode);
         const authority = createTableCell(index.appropriationAuthority);
-        const fstMatch = createTableCell(findComparisonMatch(comparisonData.fst, index).toString());
-        const sndMatch = createTableCell(findComparisonMatch(comparisonData.snd, index).toString());
+        const fstMatch = createTableCell(moneyFormatter.format(findComparisonMatch(comparisonData.fst, index)));
+        const sndMatch = createTableCell(moneyFormatter.format(findComparisonMatch(comparisonData.snd, index)));
 
         tableRow.append(account, fundType, fundCode, authority, fstMatch, sndMatch);
         return tableRow;

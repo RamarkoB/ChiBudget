@@ -10,10 +10,20 @@ svg text {
     font-family: 'Jost', sans-serif;
 }
 
+#compare {
+    width: 85%;
+}
+
+#compare > * {
+    width: 100%;
+}
+
 #compareSelectors {
+    margin-bottom: 12px;
+
     display: flex;
     gap: 16px;
-    margin-bottom: 12px;
+    justify-content: space-around;
 }
 
 .selectorWrapper {

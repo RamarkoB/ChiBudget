@@ -1,6 +1,6 @@
 import initCompare from './compare/index.ts';
 import { getDict, getUnique, importData } from './lib/utils.ts';
-import initTimeSeries from './timeSeries/index.ts';
+import initAnnualTrends from './annualTrends/index.ts';
 
 const main = async () => {
     const budgetData = await importData('ordinance');
@@ -11,7 +11,7 @@ const main = async () => {
     const fundsDict = getDict(fundsData);
     const categories = getUnique(deptsData, 'category');
 
-    initTimeSeries(budgetData, deptsData, deptsDict, fundsDict, categories);
+    initAnnualTrends(budgetData, deptsData, deptsDict, fundsDict, categories);
     initCompare(budgetData, deptsData, fundsDict);
 };
 

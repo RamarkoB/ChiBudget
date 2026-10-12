@@ -5,7 +5,7 @@ import * as d3 from 'npm:d3';
 import { BudgetData, DeptData, FileDict, FundsData } from '../lib/types.ts';
 import { years } from '../lib/utils.ts';
 
-const createBudgetGraph = (
+const createAnnualTrendsGraph = (
     budgetData: BudgetData[],
     fundsDict: FileDict<FundsData>,
 ) => {
@@ -75,20 +75,20 @@ const createBudgetGraph = (
         .y0((d) => y(d[0]))
         .y1((d) => y(d[1]));
 
-    // Create the SVG timeSeries.
-    const timeSeries = d3
+    // Create the SVG annualTrends.
+    const annualTrends = d3
         .create('svg')
         .attr('width', width)
         .attr('height', height);
 
     // Add the x-axis.
-    timeSeries
+    annualTrends
         .append('g')
         .attr('transform', `translate(0,${height - marginBottom})`)
         .call(d3.axisBottom(x).tickFormat(d3.format('d')));
 
     // Add the y-axis.
-    timeSeries
+    annualTrends
         .append('g')
         .attr('transform', `translate(${marginLeft},0)`)
         .call(
@@ -97,7 +97,7 @@ const createBudgetGraph = (
                 .tickFormat((s) => d3.format('.2s')(s).replace('G', 'B')),
         );
 
-    timeSeries
+    annualTrends
         .append('g')
         .selectAll()
         .data(series)
@@ -108,11 +108,11 @@ const createBudgetGraph = (
         .text((d) => d.key);
 
     // Append the SVG element.
-    return timeSeries.node();
+    return annualTrends.node();
 };
 
-const graphBudget = (
-    timeSeries: HTMLElement,
+const graphAnnualTrends = (
+    annualTrends: HTMLElement,
     budgetData: BudgetData[],
     deptsDict: FileDict<DeptData>,
     fundsDict: FileDict<FundsData>,
@@ -124,10 +124,10 @@ const graphBudget = (
         ? budgetData.filter((row) => deptsDict[row.deptNum].category === options.category)
         : budgetData.filter((row) => row.deptNum === options.department);
 
-    const budgetNode = createBudgetGraph(data, fundsDict);
-    if (!budgetNode) return;
+    const graphNode = createAnnualTrendsGraph(data, fundsDict);
+    if (!graphNode) return;
 
-    timeSeries.replaceChildren(budgetNode);
+    annualTrends.replaceChildren(graphNode);
 };
 
-export { graphBudget };
+export { graphAnnualTrends };

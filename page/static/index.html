@@ -21,33 +21,37 @@
         <script src="main.js" defer></script>
     </head>
 
-    <div>
-        <select id="categories"></select>
-        <span>-- or --</span>
-        <select id="departments"></select>
+    <div id="annualTrends">
+        <div>
+            <select id="categories"></select>
+            <span>-- or --</span>
+            <select id="departments"></select>
+        </div>
+
+        <div id="annualTrendsGraph"></div>
     </div>
 
-    <div id="timeSeries"></div>
+    <div id="compare">
+        <div id="compareSelectors">
+            <div class="selectorWrapper">
+                <p>Selection One</p>
+                <div>
+                    <select id="compareDept1"></select>
+                    <select id="compareYear1"></select>
+                </div>
+            </div>
 
-    <div id="compareSelectors">
-        <div class="selectorWrapper">
-            <p>Selection One</p>
-            <div>
-                <select id="compareDept1"></select>
-                <select id="compareYear1"></select>
+            <div class="selectorWrapper">
+                <p>Selection Two</p>
+                <div>
+                    <select id="compareDept2"></select>
+                    <select id="compareYear2"></select>
+                </div>
             </div>
         </div>
 
-        <div class="selectorWrapper">
-            <p>Selection Two</p>
-            <div>
-                <select id="compareDept2"></select>
-                <select id="compareYear2"></select>
-            </div>
-        </div>
+        <table id="compareTable"></table>
     </div>
-
-    <table id="compareTable"></table>
 
     <div id="sankey"></div>
 </html>
