@@ -1,5 +1,5 @@
-import { BudgetData, DeptData, FileDict, FundsData } from '../lib/types.ts';
-import { appendOption, years } from '../lib/utils.ts';
+import { BudgetData, DeptData, FileDict, FundsData } from '@/lib/types.ts';
+import { appendOption, years } from '@/lib/utils.ts';
 import createCompareTable from './table.ts';
 
 type Selectors = [

@@ -2,8 +2,8 @@
 import * as d3 from 'npm:d3';
 
 // internal imports
-import { BudgetData, DeptData, FileDict, FundsData } from '../lib/types.ts';
-import { years } from '../lib/utils.ts';
+import { BudgetData, DeptData, FileDict, FundsData } from '@/lib/types.ts';
+import { years } from '@/lib/utils.ts';
 
 const createAnnualTrendsGraph = (
     budgetData: BudgetData[],

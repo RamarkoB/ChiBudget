@@ -1,5 +1,5 @@
-import { BudgetData, DeptData, FileDict, FundsData } from '../lib/types.ts';
-import { appendOption } from '../lib/utils.ts';
+import { BudgetData, DeptData, FileDict, FundsData } from '@/lib/types.ts';
+import { appendOption } from '@/lib/utils.ts';
 import { graphAnnualTrends } from './graph.ts';
 
 const initAnnualTrends = (

@@ -1,7 +1,7 @@
-import { getDict, getUnique, importData } from './lib/utils.ts';
-import initAnnualTrends from './annualTrends/index.ts';
-import initCompare from './compare/index.ts';
-import initDeptTable from './deptTable/index.ts';
+import { getDict, getUnique, importData } from '@/lib/utils.ts';
+import initAnnualTrends from '@/views/annualTrends/index.ts';
+import initCompare from '@/views/compare/index.ts';
+import initDeptTable from '@/views/deptTable/index.ts';
 
 enum View {
     AnnualTrends = 'annualTrends',
