@@ -67,3 +67,7 @@ tr:nth-child(odd) {
 .totalTitle {
     font-weight: bold;
 }
+
+#deptTableYear {
+    margin-bottom: 12px;
+}
