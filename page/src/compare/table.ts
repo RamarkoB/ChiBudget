@@ -49,6 +49,8 @@ const getComparisons = (
     { fst: [], snd: [], indices: new Set() },
 );
 
+const getTotal = (matches: ComparisonMatch[]) => matches.reduce((acc, match) => acc + match.amount, 0);
+
 const findComparisonMatch = (
     matches: ComparisonMatch[],
     index: Omit<ComparisonMatch, 'deptNum' | 'amount'>,
@@ -71,10 +73,23 @@ const createTableHeader = () => {
     return tableHeader;
 };
 
-const createTableCell = (value: string, rowspan?: number) => {
+const createTableFooter = (total1: number, total2: number) => {
+    const tableFooter = document.createElement('tr');
+
+    const titleCell = createTableCell('Total', undefined, 3);
+    const total1Cell = createTableCell(moneyFormatter.format(total1));
+    const total2Cell = createTableCell(moneyFormatter.format(total2));
+    titleCell.className = 'totalTitle';
+
+    tableFooter.append(titleCell, total1Cell, total2Cell);
+    return tableFooter;
+};
+
+const createTableCell = (value: string, rowspan?: number, colspan?: number) => {
     const cell = document.createElement('td');
     cell.innerText = value;
     if (rowspan) cell.rowSpan = rowspan;
+    if (colspan) cell.colSpan = colspan;
     return cell;
 };
 
@@ -146,8 +161,9 @@ const createCompareTable = (
             });
         });
     });
+    const tableFooter = createTableFooter(getTotal(comparisonData.fst), getTotal(comparisonData.snd));
 
-    compareTable.replaceChildren(tableHeader, ...tableRows);
+    compareTable.replaceChildren(tableHeader, ...tableRows, tableFooter);
 };
 
 export default createCompareTable;

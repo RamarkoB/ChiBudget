@@ -50,3 +50,7 @@ td, th {
 tr:nth-child(odd) {
     background-color: #ebedee;
 }
+
+.totalTitle {
+    font-weight: bold;
+}
