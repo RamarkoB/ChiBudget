@@ -21,37 +21,58 @@
         <script src="main.js" defer></script>
     </head>
 
-    <div id="annualTrends">
-        <div>
-            <select id="categories"></select>
-            <span>-- or --</span>
-            <select id="departments"></select>
-        </div>
-
-        <div id="annualTrendsGraph"></div>
-    </div>
-
-    <div id="compare">
-        <div id="compareSelectors">
-            <div class="selectorWrapper">
-                <p>Selection One</p>
+    <body>
+        <main>
+            <div id="annualTrends" class="view selected">
                 <div>
-                    <select id="compareDept1"></select>
-                    <select id="compareYear1"></select>
+                    <select id="categories"></select>
+                    <span>-- or --</span>
+                    <select id="departments"></select>
                 </div>
+
+                <div id="annualTrendsGraph"></div>
             </div>
 
-            <div class="selectorWrapper">
-                <p>Selection Two</p>
-                <div>
-                    <select id="compareDept2"></select>
-                    <select id="compareYear2"></select>
+            <div id="compare" class="view">
+                <div id="compareSelectors">
+                    <div class="selectorWrapper">
+                        <p>Selection One</p>
+                        <div>
+                            <select id="compareDept1"></select>
+                            <select id="compareYear1"></select>
+                        </div>
+                    </div>
+
+                    <div class="selectorWrapper">
+                        <p>Selection Two</p>
+                        <div>
+                            <select id="compareDept2"></select>
+                            <select id="compareYear2"></select>
+                        </div>
+                    </div>
                 </div>
+
+                <table id="compareTable"></table>
+            </div>
+
+            <div id="sankey" class="view"></div>
+        </main>
+
+        <div id="sidebar">
+            <div>
+                <input type="radio" name="view" id="annualTrendView" value="annualTrends" checked />
+                <label for="annualTrendView">Annual Trends View</label>
+            </div>
+
+            <div>
+                <input type="radio" name="view" id="compareView" value="compare" />
+                <label for="compareView">Compare View</label>
+            </div>
+
+            <div>
+                <input type="radio" name="view" id="tableView" value="table" />
+                <label for="tableView">Table View</label>
             </div>
         </div>
-
-        <table id="compareTable"></table>
-    </div>
-
-    <div id="sankey"></div>
+    </body>
 </html>

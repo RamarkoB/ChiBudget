@@ -2,16 +2,29 @@
     font-family: 'Jost', sans-serif;
 }
 
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+main {
+    width: 85%;
+}
+
+#sidebar {
+    width: 15%;
+}
+
+.view:not(.selected) {
+    display: none;
+}
+
 select {
     font-family: 'Jost', sans-serif;
 }
 
 svg text {
     font-family: 'Jost', sans-serif;
-}
-
-#compare {
-    width: 85%;
 }
 
 #compare > * {
