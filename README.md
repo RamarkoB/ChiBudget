@@ -1,15 +1,13 @@
 # Welcome to the Chicago Budget Dashboard Project
+Our goal is to consolidate the different City-Published Tablue Data visualizations into a single, consolidated source to better understand the Chicago Budget
 
-- Budget Transfers:
-  https://data.cityofchicago.org/Administration-Finance/Budget-Transfer-Report-Source-Data/7x7d-3zgj/data_preview
-- Budget Publications:
-  https://www.chicago.gov/city/en/depts/obm/provdrs/budget/svcs/BudgetPublications.html
-  -Information from the Office of the Inspector General:
-  https://igchicago.org/information-portal/data-dashboards/city-budget-by-departments/
-- Info from 2026 Budget Breakdown:
-  https://public.tableau.com/app/profile/obm.data.analytics/viz/CityofChicago-BudgetataGlance/ChicagoBudgetataGlance?publish=yes
-- FY Budget Ordinance Dashboard:
-  https://www.chicago.gov/city/en/depts/cofa/supp_info/COFAdata/2026BudgetOrdinance.html
+
+## Existing Sources and Visualizations
+- [Budget Transfers](https://data.cityofchicago.org/Administration-Finance/Budget-Transfer-Report-Source-Data/7x7d-3zgj/data_preview)
+- [Budget Publications](https://www.chicago.gov/city/en/depts/obm/provdrs/budget/svcs/BudgetPublications.html)
+- [Information from the Office of the Inspector General (Removed)](https://igchicago.org/information-portal/data-dashboards/city-budget-by-departments/)
+- [Info from 2026 Budget Breakdown](https://public.tableau.com/app/profile/obm.data.analytics/viz/CityofChicago-BudgetataGlance/ChicagoBudgetataGlance?publish=yes)
+- [FY Budget Ordinance Dashboard](https://www.chicago.gov/city/en/depts/cofa/supp_info/COFAdata/2026BudgetOrdinance.html)
 
 # Definitions
 
@@ -30,6 +28,9 @@ sustainability services.
   internal transfers between funds need to be deducted to more accurately
   reflect the City appropriation.
 - Total resources include revenues generated during the year.
+
+# Notes
+- In 2019, Mayor Lightfoot merged the Department of Innovation and Technology with Fleet and Facility Management. This merger was undone by Brandon Johnson. [1](https://derekeder.com/blog/doit-2fm-merger-questions)
 
 # Outstanding Tasks
 
