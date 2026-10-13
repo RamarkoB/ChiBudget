@@ -1,5 +1,5 @@
 import { BudgetData, FileDict, FundsData } from '../lib/types.ts';
-import { years } from '../lib/utils.ts';
+import { fmtMoney, years } from '../lib/utils.ts';
 
 type BudgetComparison = {
     fstYear: (typeof years)[number];
@@ -153,8 +153,8 @@ const createCompareTable = (
                 if (fundCodeIndex === 0) tableRow.appendChild(createTableCell(fundType, fundCodesLength));
 
                 const fundCodeCell = createTableCell(fundCode);
-                const fstCell = createTableCell(moneyFormatter.format(fst));
-                const sndCell = createTableCell(moneyFormatter.format(snd));
+                const fstCell = createTableCell(fmtMoney(fst));
+                const sndCell = createTableCell(fmtMoney(snd));
 
                 tableRow.append(fundCodeCell, fstCell, sndCell);
                 return tableRow;

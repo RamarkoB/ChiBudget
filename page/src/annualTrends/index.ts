@@ -9,8 +9,8 @@ const initAnnualTrends = (
     fundsDict: FileDict<FundsData>,
     categories: string[],
 ) => {
-    const categorySelector = document.getElementsByTagName('select').namedItem('categories');
-    const deptSelector = document.getElementsByTagName('select').namedItem('departments');
+    const categorySelector = document.getElementsByTagName('select').namedItem('annualTrendCategories');
+    const deptSelector = document.getElementsByTagName('select').namedItem('annualTrendDepts');
     const annualTrends = document.getElementById('annualTrendsGraph');
     if (!categorySelector || !deptSelector || !annualTrends) return;
 

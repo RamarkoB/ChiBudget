@@ -20,6 +20,10 @@ const years = [
     2026,
 ] as const;
 
+const moneyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+const fmtMoney = (num: number) => moneyFormatter.format(num);
+
 const parseFileData = <T extends DataFileName>(fileName: T) => (row: string): DataOfFile<T> => {
     const split = row.split(',');
 
@@ -99,4 +103,4 @@ const appendOption = (
     return option;
 };
 
-export { appendOption, getDict, getUnique, importData, years };
+export { appendOption, fmtMoney, getDict, getUnique, importData, years };
