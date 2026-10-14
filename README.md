@@ -1,5 +1,5 @@
 # Welcome to the Chicago Budget Dashboard Project
-Our goal is to consolidate the different City-Published Tablue Data visualizations into a single, consolidated source to better understand the Chicago Budget
+Our goal is to consolidate the different City-Published Tableau Data visualizations into a single, consolidated source to better understand the Chicago Budget
 
 
 ## Existing Sources and Visualizations
@@ -8,6 +8,7 @@ Our goal is to consolidate the different City-Published Tablue Data visualizatio
 - [Information from the Office of the Inspector General (Removed)](https://igchicago.org/information-portal/data-dashboards/city-budget-by-departments/)
 - [Info from 2026 Budget Breakdown](https://public.tableau.com/app/profile/obm.data.analytics/viz/CityofChicago-BudgetataGlance/ChicagoBudgetataGlance?publish=yes)
 - [FY Budget Ordinance Dashboard](https://www.chicago.gov/city/en/depts/cofa/supp_info/COFAdata/2026BudgetOrdinance.html)
+- [ACFR Analysis FY2025](https://www.chicago.gov/city/en/depts/cofa/supp_info/BudgetAnalysis/ACFRAnalysisFY2025.html)
 
 # Definitions
 

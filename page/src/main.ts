@@ -2,11 +2,13 @@ import { getDict, getUnique, importData } from '@/lib/utils.ts';
 import initAnnualTrends from '@/views/annualTrends/index.ts';
 import initCompare from '@/views/compare/index.ts';
 import initDeptTable from '@/views/deptTable/index.ts';
+import initSankey from './views/sankey/index.ts';
 
 enum View {
     AnnualTrends = 'annualTrends',
     Compare = 'compare',
     DeptList = 'deptsList',
+    FundsFlow = 'fundsFlow',
 }
 
 const viewUpdate = (view: View) => {
@@ -25,10 +27,7 @@ const main = async () => {
     const fundsDict = getDict(fundsData);
     const categories = getUnique(deptsData, 'category');
 
-    document.getElementsByTagName('input');
-
     const radios = document.getElementsByTagName('input');
-
     [...radios].forEach((radio) => {
         radio.addEventListener('change', () => {
             viewUpdate(radio.value as View);
@@ -38,6 +37,7 @@ const main = async () => {
     initAnnualTrends(budgetData, deptsData, deptsDict, fundsDict, categories);
     initCompare(budgetData, deptsData, fundsDict);
     initDeptTable(budgetData, deptsData);
+    initSankey(budgetData);
 };
 
 main();

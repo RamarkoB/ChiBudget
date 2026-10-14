@@ -5,18 +5,20 @@ import * as d3 from 'npm:d3';
 import { BudgetData, DeptData, FileDict, FundsData } from '@/lib/types.ts';
 import { years } from '@/lib/utils.ts';
 
+const width = 640;
+const height = 400;
+
+const margin = {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: 40,
+};
+
 const createAnnualTrendsGraph = (
     budgetData: BudgetData[],
     fundsDict: FileDict<FundsData>,
 ) => {
-    // Declare the chart dimensions and margins.
-    const width = 640;
-    const height = 400;
-    const marginTop = 20;
-    const marginRight = 20;
-    const marginBottom = 30;
-    const marginLeft = 40;
-
     const budgets = years.flatMap((year) => {
         const { local, grants } = budgetData.reduce(
             (acc, row) =>
@@ -41,7 +43,7 @@ const createAnnualTrendsGraph = (
     const x = d3
         .scaleLinear()
         .domain(d3.extent(years) as [number, number])
-        .range([marginLeft, width - marginRight]);
+        .range([margin.left, width - margin.right]);
 
     // Declare the y (vertical position) scale.
     const y = d3
@@ -50,7 +52,7 @@ const createAnnualTrendsGraph = (
             number,
             number,
         ])
-        .range([height - marginBottom, marginTop]);
+        .range([height - margin.bottom, margin.top]);
 
     const series = d3
         .stack()
@@ -84,13 +86,13 @@ const createAnnualTrendsGraph = (
     // Add the x-axis.
     annualTrends
         .append('g')
-        .attr('transform', `translate(0,${height - marginBottom})`)
+        .attr('transform', `translate(0,${height - margin.bottom})`)
         .call(d3.axisBottom(x).tickFormat(d3.format('d')));
 
     // Add the y-axis.
     annualTrends
         .append('g')
-        .attr('transform', `translate(${marginLeft},0)`)
+        .attr('transform', `translate(${margin.left},0)`)
         .call(
             d3
                 .axisLeft(y)

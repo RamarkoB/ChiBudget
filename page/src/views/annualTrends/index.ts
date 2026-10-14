@@ -23,7 +23,6 @@ const initAnnualTrends = (
 
     appendOption(deptSelector, 'All', 'All');
     deptsData.forEach((dept) => appendOption(deptSelector, `${dept.id} - ${dept.name}`, dept.id));
-
     deptSelector.addEventListener('change', () => {
         graphAnnualTrends(annualTrends, budgetData, deptsDict, fundsDict, { category: 'All', department: deptSelector?.value });
         categorySelector.value = 'All';
