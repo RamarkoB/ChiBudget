@@ -1,5 +1,5 @@
-import { BudgetData, DeptData, FileDict, FundsData } from '@/lib/types.ts';
-import { appendOption, years } from '@/lib/utils.ts';
+import { BudgetData, DataYear, DeptData, FileDict, FundsData, years } from '@/lib/types.ts';
+import { appendOption } from '@/lib/utils.ts';
 import createCompareTable from './table.ts';
 
 type Selectors = [
@@ -46,9 +46,9 @@ const handleSelectors = (
     fundsDict: FileDict<FundsData>,
     [compareYear1, compareYear2, compareDept1, compareDept2]: Selectors,
 ) => createCompareTable(budgetData, fundsDict, {
-    fstYear: Number(compareYear1.value) as (typeof years)[number],
+    fstYear: Number(compareYear1.value) as DataYear,
     fstDept: compareDept1.value,
-    sndYear: Number(compareYear2.value) as (typeof years)[number],
+    sndYear: Number(compareYear2.value) as DataYear,
     sndDept: compareDept2.value,
 });
 

@@ -2,7 +2,7 @@ import { getDict, getUnique, importData } from '@/lib/utils.ts';
 import initAnnualTrends from '@/views/annualTrends/index.ts';
 import initCompare from '@/views/compare/index.ts';
 import initDeptTable from '@/views/deptTable/index.ts';
-import initSankey from './views/sankey/index.ts';
+import initFundsFlow from '@/views/fundsFlow/index.ts';
 
 enum View {
     AnnualTrends = 'annualTrends',
@@ -37,7 +37,7 @@ const main = async () => {
     initAnnualTrends(budgetData, deptsData, deptsDict, fundsDict, categories);
     initCompare(budgetData, deptsData, fundsDict);
     initDeptTable(budgetData, deptsData);
-    initSankey(budgetData);
+    initFundsFlow(budgetData, deptsDict, fundsDict);
 };
 
 main();

@@ -1,5 +1,5 @@
-import { BudgetData, DeptData } from '@/lib/types.ts';
-import { fmtMoney, years } from '@/lib/utils.ts';
+import { BudgetData, DeptData, years } from '@/lib/types.ts';
+import { fmtMoney } from '@/lib/utils.ts';
 
 const createTableCell = (value: string) => {
     const cell = document.createElement('td');

@@ -1,25 +1,6 @@
 // internal imports
 import { BudgetData, DataFileName, DataOfFile, DeptData, FileDict, FundsData } from './types.ts';
 
-const years = [
-    2011,
-    2012,
-    2013,
-    2014,
-    2015,
-    2016,
-    2017,
-    2018,
-    2019,
-    2020,
-    2021,
-    2022,
-    2023,
-    2024,
-    2025,
-    2026,
-] as const;
-
 const moneyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
 const fmtMoney = (num: number) => moneyFormatter.format(num);
@@ -63,6 +44,7 @@ const parseFileData = <T extends DataFileName>(fileName: T) => (row: string): Da
                 id: split[0],
                 name: split[1],
                 type: split[2],
+                category: split[3],
             } as FundsData as DataOfFile<T>;
     }
 };
@@ -103,4 +85,4 @@ const appendOption = (
     return option;
 };
 
-export { appendOption, fmtMoney, getDict, getUnique, importData, years };
+export { appendOption, fmtMoney, getDict, getUnique, importData };

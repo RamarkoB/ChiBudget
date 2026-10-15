@@ -1,10 +1,10 @@
-import { BudgetData, FileDict, FundsData } from '@/lib/types.ts';
-import { fmtMoney, years } from '@/lib/utils.ts';
+import { DataYear, BudgetData, FileDict, FundsData } from '@/lib/types.ts';
+import { fmtMoney, } from '@/lib/utils.ts';
 
 type BudgetComparison = {
-    fstYear: (typeof years)[number];
+    fstYear: DataYear;
     fstDept: string;
-    sndYear: (typeof years)[number];
+    sndYear: DataYear;
     sndDept: string;
 };
 
