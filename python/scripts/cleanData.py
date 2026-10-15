@@ -96,7 +96,7 @@ accountCategories = [
     "9600 - Transfers and Reimbursements",
     "9700 - Transfers and Reimbursements",
     "9800 - Special Events Projects",
-    "9900 - Pension Purposes as Specified"
+    "9900 - Pension Purposes as Specified",
 ]
 
 accounts = [
@@ -348,25 +348,15 @@ accounts = [
     "N/A - Restoration Committee",
 ]
 
-fundsCodes = [
-    "0B09 - CTA Real Property Transfer Tax Fund",
-    "0B21 - Tax Increment Financing Administration Fund",
-    "0B25 - Chicago Police CTA Detail Fund",
-    "0B26 - Chicago Parking Meters Fund",
-    "0B32 - Garbage Collection Fund",
-    "0B42 - Foreign Fire Insurance Tax Fund",
-    "0B53 - Wheelchair Accessible Vehicle Fund",
-    "0B64 - Cable Local Origination Fund",
-    "0B67 - Protecting CARE Fund",
-    "0B70 - Cannabis Regulation Tax",
-    "0B89 - Opioid Settlement Fund",
-    "0B90 - Vaping Settlement Fund",
-    "0B92 - Construction and Demolition Debris Management Fund",
-    "0B93 - Houseshare Surcharge - Homeless Services Fund",
-    "0B94 - Houseshare Surcharge - Domestic Violence Fund",
-    "0D43 - Neighborhoods Opportunity Fund",
-    "0D44 - Citywide Adopt-a-landmark Fund",
-    "0D45 - Local Impact Fund",
+fundCategories = {
+    "Corporate Funds": ["0100"],
+    "Enterprise Funds": ["0200", "0314", "0610", "0740"],
+    "Pension Funds": ["0681", "0682", "0683", "0684"],
+    "Special Revenue Funds": ['0300','0310','0346','0353','0355','0994','0996','0B09','0B21','0B25','0B26','0B32','0B93','0B42','0B94','0B70','0B64','0B99','0D44','0B65','0B92','0D45','0D43','0B89','0B90','0B53', '0B67', "0B40", "0B41", "0B43", "0B82"],
+    "Debt Service Funds": ['0342','0383','0505','0509','0510','0516','0521','0525','0549','0934','0995','0B39']
+}
+
+fundsCodes = [    
     "925C - COVID-19 Grant Fund",
     "925D - Disaster Recovery Fund",
     "925E - Entitlement Fund",
@@ -383,16 +373,43 @@ fundsCodes = [
     "0346 - Library Fund",
     "0353 - Emergency Communication Fund",
     "0355 - Special Events and Municipal Hotel Operators' Occupation Tax Fund",
+    "0383 - Motor Fuel Tax Debt Service Fund",
     "0510 - Bond Redemption and Interest Series Fund",
+    "0516 - Library Bond Redemption Fund",
     "0521 - Library Property Tax Levy Fund",
+    "0525 - Emergency Communication Bond Redemption and Interest Fund",
+    "0549 - City Colleges Bond Redemption and Interest Fund",
     "0610 - Chicago Midway Airport Fund",
     "0681 - Municipal Employees' Annuity and Benefit Fund",
     "0682 - Laborers' and Retirement Board Annuity and Benefit Fund",
     "0683 - Policemen's Annuity and Benefit Fund",
     "0684 - Firemen's Annuity and Benefit Fund",
-    "0740 - O'HARE REVENUE FUND",
+    "0740 - Chicago O'Hare Airport Fund",
     "0994 - Controlled Substances Fund",
     "0996 - Affordable Housing Opportunity Fund",
+    "0B09 - CTA Real Property Transfer Tax Fund",
+    "0B21 - Tax Increment Financing Administration Fund",
+    "0B25 - Chicago Police CTA Detail Fund",
+    "0B26 - Chicago Parking Meters Fund",
+    "0B32 - Garbage Collection Fund",
+    "0B42 - Foreign Fire Insurance Tax Fund",
+    "0B39 - Human Capital Innovation Fund",
+    "0B40 - Houseshare Surcharge - Homeless Services Fund",
+    "0B41 - Neighborhood Opportunity Fund",
+    "0B43 - Houseshare Surcharge - Domestic Violence Fund",
+    "0B82 - Neighborhood Opportunity Fund",
+    "0B53 - Wheelchair Accessible Vehicle Fund",
+    "0B64 - Cable Local Origination Fund",
+    "0B67 - Protecting CARE Fund",
+    "0B70 - Cannabis Regulation Tax",
+    "0B89 - Opioid Settlement Fund",
+    "0B90 - Vaping Settlement Fund",
+    "0B92 - Construction and Demolition Debris Management Fund",
+    "0B93 - Houseshare Surcharge - Homeless Services Fund",
+    "0B94 - Houseshare Surcharge - Domestic Violence Fund",
+    "0D43 - Neighborhoods Opportunity Fund",
+    "0D44 - Citywide Adopt-a-landmark Fund",
+    "0D45 - Local Impact Fund",
     "GA00 - Coronavirus Local Fiscal Recovery Fund",
 ]
 
@@ -452,6 +469,14 @@ def makeSeries(ls, columns, titleCase=False):
     if titleCase:
         series = series.apply(cleanTitle)
     return series
+
+def getSeriesCategories(categories, columns):
+    matches = []
+    for key, value in categories.items():
+        for code in value:
+            matches.append([code, key])
+            
+    return makeSeries(matches, columns)
 
 def splitSeries(ls, columns, titleCase=False):
     return makeSeries(list(map(lambda x: x.split(" - ", 1), ls)), columns, titleCase)
@@ -518,20 +543,15 @@ def cleanData():
     )
     print("   Completed Ordinance Table...")
 
-    # match catories to id keys
-    categoryMatches = []
-    for key, value in deptCategories.items():
-        for code in value:
-            categoryMatches.append([code, key])
-            
-    categorySeries = makeSeries(categoryMatches, ["deptNum", "category"])
     deptNameSeries = splitSeries(depts, ["deptNum", "deptName"], True)
-    deptsDF = pd.concat([deptNameSeries, categorySeries], axis=1)
+    deptCategorySeries = getSeriesCategories(deptCategories, ["deptNum", "deptCategory"])
+    deptsDF = pd.concat([deptNameSeries, deptCategorySeries], axis=1)
 
-    accountCategoriesSeries = splitSeries(accountCategories, ["categoryNum", "categoryName"]).to_frame()
     accountsDF = splitSeries(accounts, ["accountNum", "accountName"]).to_frame()
+    accountCategoriesSeries = splitSeries(accountCategories, ["categoryNum", "categoryName"]).to_frame()
     accountsDF["category"] = accountsDF.index.map(lambda x: getCategoryNumber(accountCategoriesSeries, x))
 
+    fundCategorySeries = getSeriesCategories(fundCategories, ["fundCode", "fundCategory"])
     fundsDF = (
         df[["fundType", "fundCode"]]
         .value_counts()
@@ -550,7 +570,14 @@ def cleanData():
         ),
         axis=1,
     )
-    fundsDF = fundsDF[["fundName", "fundType"]]
+    fundsDF["fundCategory"] = fundsDF.apply(
+        lambda row: (
+            fundCategorySeries.loc[row.name]
+            if row["fundType"] == "LOCAL"
+            else "Grant Funds"
+        ),
+        axis=1, 
+    )
 
     makeCSV(ordinanceDF, "ordinance", False)
     makeCSV(accountsDF, "accounts")
