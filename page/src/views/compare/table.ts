@@ -1,5 +1,5 @@
-import { DataYear, BudgetData, FileDict, FundsData } from '@/lib/types.ts';
-import { fmtMoney, } from '@/lib/utils.ts';
+import { BudgetData, DataYear, FileDict, FundsData } from '@/lib/types.ts';
+import { fmtMoney } from '@/lib/utils.ts';
 
 type BudgetComparison = {
     fstYear: DataYear;

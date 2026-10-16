@@ -33,19 +33,10 @@ const parseFileData = <T extends DataFileName>(fileName: T) => (row: string): Da
             } as BudgetData as DataOfFile<T>;
 
         case 'depts':
-            return {
-                id: split[0],
-                name: split[1],
-                category: split[2],
-            } as DeptData as DataOfFile<T>;
+            return { id: split[0], name: split[1], category: split[2] } as DeptData as DataOfFile<T>;
 
         case 'funds':
-            return {
-                id: split[0],
-                name: split[1],
-                type: split[2],
-                category: split[3],
-            } as FundsData as DataOfFile<T>;
+            return { id: split[0], type: split[1], name: split[2], category: split[3] } as FundsData as DataOfFile<T>;
     }
 };
 
