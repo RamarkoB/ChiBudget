@@ -345,6 +345,8 @@ accounts = [
     "9985 - Laborers' Fund Advance Pension Payment",
     "9986 - Policemen's Fund Advance Pension Payment",
     "9987 - Firemen's Fund Advance Pension Payment",
+    "909A - Reserve Balance",
+    "929B - Restoration Committee",
     "N/A - Restoration Committee",
 ]
 
@@ -540,17 +542,20 @@ def cleanData():
         cleanedDF.apply(lambda row: getValues(df, row), axis=1, result_type="expand").fillna(0),
         left_index=True,
         right_index=True,
-    )
+    ).rename({"deptNum": "dept", "fundCode": "fund"})
     print("   Completed Ordinance Table...")
 
+    # create department table
     deptNameSeries = splitSeries(depts, ["deptNum", "deptName"], True)
     deptCategorySeries = getSeriesCategories(deptCategories, ["deptNum", "deptCategory"])
-    deptsDF = pd.concat([deptNameSeries, deptCategorySeries], axis=1)
+    deptsDF = pd.concat([deptNameSeries, deptCategorySeries], axis=1).rename_axis("id").rename(columns={"deptName": "name", "deptCategory": "category"})
 
-    accountsDF = splitSeries(accounts, ["accountNum", "accountName"]).to_frame()
+    # create accounts table
+    accountsDF = splitSeries(accounts, ["accountNum", "accountName"]).to_frame().rename_axis("id").rename(columns={"accountName": "name"})
     accountCategoriesSeries = splitSeries(accountCategories, ["categoryNum", "categoryName"]).to_frame()
     accountsDF["category"] = accountsDF.index.map(lambda x: getCategoryNumber(accountCategoriesSeries, x))
 
+    # create funds table
     fundCategorySeries = getSeriesCategories(fundCategories, ["fundCode", "fundCategory"])
     fundsDF = (
         df[["fundType", "fundCode"]]
@@ -560,25 +565,27 @@ def cleanData():
         .reset_index()
         .sort_values(by=["fundCode"])
         .set_index("fundCode")
+        .rename_axis("id").rename(columns={"fundType": "type"})
     )
-    fundsDF["fundName"] = splitSeries(fundsCodes, ["fundNum", "fundName"])
-    fundsDF["fundName"] = fundsDF.apply(
+    fundsDF["name"] = splitSeries(fundsCodes, ["fundNum", "fundName"])
+    fundsDF["name"] = fundsDF.apply(
         lambda row: (
             df[df["fundCode"] == row.name].iloc[0]["fundDescription"]
-            if pd.isna(row["fundName"])
-            else row["fundName"]
+            if pd.isna(row["name"])
+            else row["name"]
         ),
         axis=1,
     )
-    fundsDF["fundCategory"] = fundsDF.apply(
+    fundsDF["category"] = fundsDF.apply(
         lambda row: (
             fundCategorySeries.loc[row.name]
-            if row["fundType"] == "LOCAL"
+            if row["type"] == "LOCAL"
             else "Grant Funds"
         ),
         axis=1, 
     )
 
+    # convert tables to CSV
     makeCSV(ordinanceDF, "ordinance", False)
     makeCSV(accountsDF, "accounts")
     makeCSV(deptsDF, "depts")

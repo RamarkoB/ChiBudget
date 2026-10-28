@@ -2,7 +2,7 @@
 import * as d3 from 'npm:d3';
 
 // internal imports
-import { BudgetData, DeptData, FileDict, FundsData, years } from '@/lib/types.ts';
+import { DeptsData, FileDict, FundsData, OrdinanceData, years } from '@/lib/types.ts';
 
 const width = 640;
 const height = 400;
@@ -14,12 +14,9 @@ const margin = {
     left: 40,
 };
 
-const createAnnualTrendsGraph = (
-    budgetData: BudgetData[],
-    fundsDict: FileDict<FundsData>,
-) => {
+const createAnnualTrendsGraph = (ordinanceData: OrdinanceData[], fundsDict: FileDict<FundsData>) => {
     const budgets = years.flatMap((year) => {
-        const { local, grants } = budgetData.reduce(
+        const { local, grants } = ordinanceData.reduce(
             (acc, row) =>
                 fundsDict[row.fundCode].type === 'LOCAL'
                     ? { grants: acc.grants, local: acc.local + row[year] }
@@ -56,13 +53,7 @@ const createAnnualTrendsGraph = (
     const series = d3
         .stack()
         .keys(['local', 'grants'])
-        .value(([, group], key) => group.get(key).value)(
-            d3.index(
-                budgetsTidy,
-                (d) => d.year,
-                (d) => d.type,
-            ),
-        );
+        .value(([, group], key) => group.get(key).value)(d3.index(budgetsTidy, (d) => d.year, (d) => d.type));
 
     const color = d3
         .scaleOrdinal()
@@ -114,16 +105,16 @@ const createAnnualTrendsGraph = (
 
 const graphAnnualTrends = (
     annualTrends: HTMLElement,
-    budgetData: BudgetData[],
-    deptsDict: FileDict<DeptData>,
+    ordinanceData: OrdinanceData[],
+    deptsDict: FileDict<DeptsData>,
     fundsDict: FileDict<FundsData>,
     options: { category: string; department: string },
 ) => {
     const data = options.category === 'All' && options.department === 'All'
-        ? budgetData
+        ? ordinanceData
         : options.category !== 'All'
-        ? budgetData.filter((row) => deptsDict[row.deptNum].category === options.category)
-        : budgetData.filter((row) => row.deptNum === options.department);
+        ? ordinanceData.filter((row) => deptsDict[row.deptNum].category === options.category)
+        : ordinanceData.filter((row) => row.deptNum === options.department);
 
     const graphNode = createAnnualTrendsGraph(data, fundsDict);
     if (!graphNode) return;

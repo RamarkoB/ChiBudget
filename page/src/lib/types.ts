@@ -1,9 +1,3 @@
-type DataFileName = 'ordinance' | 'depts' | 'funds';
-
-type DataOfFile<T extends DataFileName> = T extends 'ordinance' ? BudgetData
-    : T extends 'depts' ? DeptData
-    : FundsData;
-
 const years = [
     2011,
     2012,
@@ -25,11 +19,19 @@ const years = [
 
 type DataYear = (typeof years)[number];
 
-type BudgetData = { deptNum: string; appropriationAccount: string; fundCode: string } & Record<DataYear, number>;
-type DeptData = { id: string; name: string; category: string };
+type OrdinanceData = { deptNum: string; appropriationAccount: string; fundCode: string } & Record<DataYear, number>;
+type DeptsData = { id: string; name: string; category: string };
 type FundsData = { id: string; name: string; type: string; category: string };
+type AccountsData = { id: string; name: string; category: string };
 
-type FileDict<T extends DeptData | FundsData> = Record<string, Omit<T, 'id'>>;
+type DataFileName = 'ordinance' | 'depts' | 'funds' | 'accounts';
+
+type DataOfFile<T extends DataFileName> = T extends 'ordinance' ? OrdinanceData
+    : T extends 'depts' ? DeptsData
+    : T extends 'funds' ? FundsData
+    : AccountsData;
+
+type FileDict<T extends DeptsData | FundsData | AccountsData> = Record<string, Omit<T, 'id'>>;
 
 export { years };
-export type { BudgetData, DataFileName, DataOfFile, DataYear, DeptData, FileDict, FundsData };
+export type { AccountsData, DataFileName, DataOfFile, DataYear, DeptsData, FileDict, FundsData, OrdinanceData };

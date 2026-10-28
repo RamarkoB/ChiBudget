@@ -1,4 +1,4 @@
-import { BudgetData, DeptData, years } from '@/lib/types.ts';
+import { DeptsData, OrdinanceData, years } from '@/lib/types.ts';
 import { fmtMoney } from '@/lib/utils.ts';
 
 const createTableCell = (value: string) => {
@@ -7,8 +7,8 @@ const createTableCell = (value: string) => {
     return cell;
 };
 
-const createDeptTable = (budgetData: BudgetData[], deptsData: DeptData[], deptTable: HTMLElement) => {
-    const deptSumDict = budgetData.reduce<Record<string, Record<string, number>>>(
+const createDeptTable = (ordinanceData: OrdinanceData[], deptsData: DeptsData[], deptTable: HTMLElement) => {
+    const deptSumDict = ordinanceData.reduce<Record<string, Record<string, number>>>(
         (acc, row) => {
             years.forEach((year) => {
                 if (acc[row.deptNum]) acc[row.deptNum][year] = (acc[row.deptNum][year] ?? 0) + row[year];
@@ -47,11 +47,11 @@ const createDeptTable = (budgetData: BudgetData[], deptsData: DeptData[], deptTa
     deptTable.replaceChildren(tableHeader, ...tableRows, tableFooter);
 };
 
-const initDeptTable = (budgetData: BudgetData[], deptsData: DeptData[]) => {
+const initDeptTable = (ordinanceData: OrdinanceData[], deptsData: DeptsData[]) => {
     const deptTable = document.getElementById('deptTable');
     if (!deptTable) return;
 
-    createDeptTable(budgetData, deptsData, deptTable);
+    createDeptTable(ordinanceData, deptsData, deptTable);
 };
 
 export default initDeptTable;

@@ -4,7 +4,7 @@ import * as d3Sankey from 'npm:d3-sankey';
 
 // internal imports
 import { appendOption } from '@/lib/utils.ts';
-import { BudgetData, DataYear, DeptData, FileDict, FundsData, years } from '@/lib/types.ts';
+import { DataYear, DeptsData, FileDict, FundsData, OrdinanceData, years } from '@/lib/types.ts';
 
 type SankeyRecord = Record<string, Record<string, number>>;
 
@@ -38,7 +38,7 @@ const fundCategories = [
     'Grant Funds',
 ];
 
-const initFundsFlow = (budgetData: BudgetData[], deptDict: FileDict<DeptData>, fundsDict: FileDict<FundsData>) => {
+const initFundsFlow = (ordinanceData: OrdinanceData[], deptDict: FileDict<DeptsData>, fundsDict: FileDict<FundsData>) => {
     const yearSelector = document.getElementsByTagName('select').namedItem('fundsFlowYear');
     if (!yearSelector) return;
 
@@ -50,14 +50,14 @@ const initFundsFlow = (budgetData: BudgetData[], deptDict: FileDict<DeptData>, f
     yearSelector.value = '2026';
     yearSelector.addEventListener('change', () => {
         const value = Number(yearSelector.value) as DataYear;
-        graphFundsFlow(budgetData, deptDict, fundsDict, value);
+        graphFundsFlow(ordinanceData, deptDict, fundsDict, value);
     });
 
-    graphFundsFlow(budgetData, deptDict, fundsDict, 2026);
+    graphFundsFlow(ordinanceData, deptDict, fundsDict, 2026);
 };
 
-const graphFundsFlow = (budgetData: BudgetData[], deptDict: FileDict<DeptData>, fundsDict: FileDict<FundsData>, year: DataYear) => {
-    const linksDict = budgetData.reduce<SankeyRecord>((acc, row) => {
+const graphFundsFlow = (ordinanceData: OrdinanceData[], deptDict: FileDict<DeptsData>, fundsDict: FileDict<FundsData>, year: DataYear) => {
+    const linksDict = ordinanceData.reduce<SankeyRecord>((acc, row) => {
         const fundCategory = fundsDict[row.fundCode].category;
         const deptCategory = deptDict[row.deptNum].category;
 
@@ -94,7 +94,10 @@ const graphFundsFlow = (budgetData: BudgetData[], deptDict: FileDict<DeptData>, 
         .attr('d', d3Sankey.sankeyLinkHorizontal())
         .attr('fill', 'none')
         .attr('stroke', 'rgba(70, 130, 180, 0.5)')
-        .attr('stroke-width', (d) => d.width);
+        .attr('stroke-width', (d) => d.width ?? null)
+        .on('mouseover', (e, d) => {
+            console.log(`${d.source.name} -> ${d.target.name}: ${d.value}`);
+        });
 
     svg.selectAll('rect')
         .data(graph.nodes)
@@ -103,7 +106,10 @@ const graphFundsFlow = (budgetData: BudgetData[], deptDict: FileDict<DeptData>, 
         .attr('y', (d) => d.y0)
         .attr('width', (d) => d.x1 - d.x0)
         .attr('height', (d) => d.y1 - d.y0)
-        .attr('fill', 'steelblue');
+        .attr('fill', 'steelblue')
+        .on('mouseover', (e, d) => {
+            console.log(`${d.name}: ${d.value}`);
+        });
 
     svg.selectAll('text')
         .data(graph.nodes)

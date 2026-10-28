@@ -1,4 +1,4 @@
-fundCode,fundType,fundName,fundCategory
+id,type,name,category
 0006,GRANTS,FTA,Grant Funds
 0011,GRANTS,GREEN STREETS,Grant Funds
 0017,GRANTS,FEDERAL HIGHWAY BRIDGE,Grant Funds

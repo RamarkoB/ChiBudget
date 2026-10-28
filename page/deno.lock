@@ -18,7 +18,8 @@
     "npm:d3@*": "7.9.0_d3-selection@3.0.0",
     "npm:d3@^7.9.0": "7.9.0_d3-selection@3.0.0",
     "npm:esbuild@*": "0.28.2",
-    "npm:esbuild@~0.25.5": "0.25.12"
+    "npm:esbuild@~0.25.5": "0.25.12",
+    "npm:papaparse@^5.7.0": "5.7.0"
   },
   "jsr": {
     "@deno/esbuild-plugin@1.2.1": {
@@ -812,6 +813,9 @@
     "internmap@2.0.3": {
       "integrity": "sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg=="
     },
+    "papaparse@5.7.0": {
+      "integrity": "sha512-qBGxg/7Q3Kl9Wfhrz2Z74UnvnHTXLNG6jmKJFeBvP2+y4lV7So+7SR62+Zd47JvdrCkX+nDcnr0ObPzek/+6RA=="
+    },
     "robust-predicates@3.0.3": {
       "integrity": "sha512-NS3levdsRIUOmiJ8FZWCP7LG3QpJyrs/TE0Zpf1yvZu8cAJJ6QMW92H1c7kWpdIHo8RvmLxN/o2JXTKHp74lUA=="
     },
@@ -878,7 +882,8 @@
       "npm:@types/d3-sankey@~0.12.5",
       "npm:@types/d3@^7.4.3",
       "npm:d3-sankey@~0.12.3",
-      "npm:d3@^7.9.0"
+      "npm:d3@^7.9.0",
+      "npm:papaparse@^5.7.0"
     ]
   }
 }

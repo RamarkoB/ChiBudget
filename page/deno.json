@@ -15,7 +15,8 @@
         "@types/d3": "npm:@types/d3@^7.4.3",
         "@types/d3-sankey": "npm:@types/d3-sankey@^0.12.5",
         "d3": "npm:d3@^7.9.0",
-        "d3-sankey": "npm:d3-sankey@^0.12.3"
+        "d3-sankey": "npm:d3-sankey@^0.12.3",
+        "papaparse": "npm:papaparse@^5.7.0"
     },
     "compilerOptions": {
         "lib": ["dom", "dom.iterable", "deno.window"]

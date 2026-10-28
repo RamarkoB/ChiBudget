@@ -19,10 +19,12 @@ const viewUpdate = (view: View) => {
 };
 
 const main = async () => {
-    const budgetData = await importData('ordinance');
+    const ordinanceData = await importData('ordinance');
+    const accountsData = await importData('accounts');
     const deptsData = await importData('depts');
     const fundsData = await importData('funds');
 
+    const accountsDict = getDict(accountsData);
     const deptsDict = getDict(deptsData);
     const fundsDict = getDict(fundsData);
     const categories = getUnique(deptsData, 'category');
@@ -34,10 +36,10 @@ const main = async () => {
         });
     });
 
-    initAnnualTrends(budgetData, deptsData, deptsDict, fundsDict, categories);
-    initCompare(budgetData, deptsData, fundsDict);
-    initDeptTable(budgetData, deptsData);
-    initFundsFlow(budgetData, deptsDict, fundsDict);
+    initAnnualTrends(ordinanceData, deptsData, deptsDict, fundsDict, categories);
+    initCompare(ordinanceData, accountsDict, deptsData, fundsDict);
+    initDeptTable(ordinanceData, deptsData);
+    initFundsFlow(ordinanceData, deptsDict, fundsDict);
 };
 
 main();

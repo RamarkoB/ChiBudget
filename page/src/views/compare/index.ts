@@ -1,4 +1,4 @@
-import { BudgetData, DataYear, DeptData, FileDict, FundsData, years } from '@/lib/types.ts';
+import { AccountsData, DataYear, DeptsData, FileDict, FundsData, OrdinanceData, years } from '@/lib/types.ts';
 import { appendOption } from '@/lib/utils.ts';
 import createCompareTable from './table.ts';
 
@@ -10,8 +10,9 @@ type Selectors = [
 ];
 
 const initCompare = (
-    budgetData: BudgetData[],
-    deptsData: DeptData[],
+    ordinanceData: OrdinanceData[],
+    accountsDict: FileDict<AccountsData>,
+    deptsData: DeptsData[],
     fundsDict: FileDict<FundsData>,
 ) => {
     const selectElements = document.getElementsByTagName('select');
@@ -36,16 +37,19 @@ const initCompare = (
     compareYear1.value = '2025';
     compareYear2.value = '2026';
     const selectors: Selectors = [compareYear1, compareYear2, compareDept1, compareDept2];
-    selectors.forEach((selector) => selector.addEventListener('change', () => handleSelectors(budgetData, fundsDict, selectors)));
+    selectors.forEach((selector) =>
+        selector.addEventListener('change', () => handleSelectors(ordinanceData, accountsDict, fundsDict, selectors))
+    );
 
-    handleSelectors(budgetData, fundsDict, selectors);
+    handleSelectors(ordinanceData, accountsDict, fundsDict, selectors);
 };
 
 const handleSelectors = (
-    budgetData: BudgetData[],
+    ordinanceData: OrdinanceData[],
+    accountsDict: FileDict<AccountsData>,
     fundsDict: FileDict<FundsData>,
     [compareYear1, compareYear2, compareDept1, compareDept2]: Selectors,
-) => createCompareTable(budgetData, fundsDict, {
+) => createCompareTable(ordinanceData, accountsDict, fundsDict, {
     fstYear: Number(compareYear1.value) as DataYear,
     fstDept: compareDept1.value,
     sndYear: Number(compareYear2.value) as DataYear,

@@ -1,4 +1,4 @@
-import { BudgetData, DataYear, FileDict, FundsData } from '@/lib/types.ts';
+import { AccountsData, DataYear, FileDict, FundsData, OrdinanceData } from '@/lib/types.ts';
 import { fmtMoney } from '@/lib/utils.ts';
 
 type BudgetComparison = {
@@ -30,10 +30,10 @@ type ComparisonRow = {
 const moneyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
 const getComparisons = (
-    budgetData: BudgetData[],
+    ordinanceData: OrdinanceData[],
     fundsDict: FileDict<FundsData>,
     { fstYear, fstDept, sndYear, sndDept }: BudgetComparison,
-) => budgetData.reduce<ComparisonData>(
+) => ordinanceData.reduce<ComparisonData>(
     (acc, row) => {
         const fstMatch = row.deptNum == fstDept && row[fstYear] !== 0;
         const sndMatch = row.deptNum == sndDept && row[sndYear] !== 0;
@@ -94,14 +94,15 @@ const createTableCell = (value: string, rowspan?: number, colspan?: number) => {
 };
 
 const createCompareTable = (
-    budgetData: BudgetData[],
+    ordinanceData: OrdinanceData[],
+    accountsDict: FileDict<AccountsData>,
     fundsDict: FileDict<FundsData>,
     selectedComparison: BudgetComparison,
 ) => {
     const compareTable = document.getElementById('compareTable');
     if (!compareTable) return;
 
-    const comparisonData = getComparisons(budgetData, fundsDict, selectedComparison);
+    const comparisonData = getComparisons(ordinanceData, fundsDict, selectedComparison);
 
     const tableHeader = createTableHeader();
     const tableRows = [...comparisonData.indices].reduce<ComparisonRow[]>((acc, index) => {
@@ -142,17 +143,23 @@ const createCompareTable = (
         return acc;
     }, []).flatMap(({ appropriationAccount, fundTypes }) => {
         const fundTypesLength = fundTypes.reduce((acc, { fundCodes }) => acc + fundCodes.length, 0);
-        return fundTypes.flatMap(({ fundType, fundCodes }, fundTypeIndex) => {
+        return fundTypes.sort((a) => a.fundType === 'LOCAL' ? -1 : 1).flatMap(({ fundType, fundCodes }, fundTypeIndex) => {
             const fundCodesLength = fundCodes.length;
             return fundCodes.map(({ fundCode, fst, snd }, fundCodeIndex) => {
                 const tableRow = document.createElement('tr');
 
+                if (!accountsDict[appropriationAccount]) {
+                    console.log(appropriationAccount);
+                }
+
                 if (fundTypeIndex === 0 && fundCodeIndex === 0) {
-                    tableRow.appendChild(createTableCell(appropriationAccount, fundTypesLength));
+                    tableRow.appendChild(
+                        createTableCell(`${appropriationAccount} - ${accountsDict[appropriationAccount]?.name ?? ''}`, fundTypesLength),
+                    );
                 }
                 if (fundCodeIndex === 0) tableRow.appendChild(createTableCell(fundType, fundCodesLength));
 
-                const fundCodeCell = createTableCell(fundCode);
+                const fundCodeCell = createTableCell(`${fundCode} -  ${fundsDict[fundCode].name}`);
                 const fstCell = createTableCell(fmtMoney(fst));
                 const sndCell = createTableCell(fmtMoney(snd));
 
