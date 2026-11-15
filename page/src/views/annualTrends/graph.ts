@@ -114,8 +114,8 @@ const graphAnnualTrends = (
     const data = options.category === 'All' && options.department === 'All'
         ? ordinanceData
         : options.category !== 'All'
-        ? ordinanceData.filter((row) => deptsDict[row.deptNum].category === options.category)
-        : ordinanceData.filter((row) => row.deptNum === options.department);
+        ? ordinanceData.filter((row) => deptsDict[row.deptNum].category === Number(options.category))
+        : ordinanceData.filter((row) => row.deptNum === Number(options.department));
 
     const graphNode = createAnnualTrendsGraph(data, fundsDict);
     if (!graphNode) return;

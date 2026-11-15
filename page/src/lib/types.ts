@@ -19,8 +19,8 @@ const years = [
 
 type DataYear = (typeof years)[number];
 
-type OrdinanceData = { deptNum: string; appropriationAccount: string; fundCode: string } & Record<DataYear, number>;
-type DeptsData = { id: string; name: string; category: string };
+type OrdinanceData = { deptNum: number; appropriationAccount: string; fundCode: string } & Record<DataYear, number>;
+type DeptsData = { id: string; name: string; category: number };
 type FundsData = { id: string; name: string; type: string; category: string };
 type AccountsData = { id: string; name: string; category: string };
 

@@ -3,13 +3,13 @@ import { fmtMoney } from '@/lib/utils.ts';
 
 type BudgetComparison = {
     fstYear: DataYear;
-    fstDept: string;
+    fstDept: number;
     sndYear: DataYear;
-    sndDept: string;
+    sndDept: number;
 };
 
 type ComparisonMatch = {
-    deptNum: string;
+    deptNum: number;
     appropriationAccount: string;
     fundType: string;
     fundCode: string;
