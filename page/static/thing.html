@@ -260,25 +260,55 @@
                     <select id="fundsFlowYear"></select>
                     <div id="fundsFlowGraph"></div>
                 </div>
+                <h2 class="blockTitle">funds flow</h2>
             </div>
         </div>
 
-        <div class="blockWrapper"></div>
-        <div class="blockWrapper"></div>
+        <div class="blockWrapper">
+            <div class="block gray"></div>
+        </div>
+
         <div class="blockWrapper">
             <div class="block red"></div>
         </div>
+
         <div class="blockWrapper">
-            <div class="block purple"></div>
+            <div class="block purple">
+                <h2 class="blockTitle">departments</h2>
+            </div>
         </div>
+
         <div class="blockWrapper">
-            <div class="block orange"></div>
+            <div class="block orange">
+                <div id="annualTrends" class="view selected">
+                    <div>
+                        <select id="annualTrendCategories"></select>
+                        <span>-- or --</span>
+                        <select id="annualTrendDepts"></select>
+                    </div>
+
+                    <div id="annualTrendsGraph"></div>
+                </div>
+                <h2 class="blockTitle">annual trends</h2>
+            </div>
         </div>
+
         <div class="blockWrapper">
-            <div class="block green"></div>
+            <div class="block green">
+                <h2 class="blockTitle">compare</h2>
+            </div>
         </div>
+
         <div class="blockWrapper">
-            <div class="block pink"></div>
+            <div class="block pink">
+                <h2 class="blockTitle">donut</h2>
+            </div>
+        </div>
+
+        <div class="blockWrapper">
+            <div class="block gray">
+                <h2 class="blockTitle">info</h2>
+            </div>
         </div>
     </main>
 </html>
@@ -316,6 +346,7 @@
 
     .block:hover {
         outline: var(--color) 6px solid;
+        cursor: pointer;
     }
 
     .block:active {
@@ -324,32 +355,71 @@
         right: 0;
     }
 
+    .blockTitle {
+        margin-top: 0;
+        text-align: right;
+        color: var(--darkerColor);
+    }
+
     .main {
         grid-area: 1 / 2 / 4 / 5;
     }
 
+    .gray {
+        --color: #d9d9d9;
+        --darkerColor: #444444;
+    }
+
     .blue {
         --color: #cae4fb;
+        --darkerColor: #003b6b;
     }
 
     .red {
         --color: #ffcfdb;
+        --darkerColor: #c41230;
     }
 
     .green {
         --color: #d2ecd3;
+        --darkerColor: #004700;
     }
 
     .orange {
         --color: #ffcf9e;
+        --darkerColor: #ff7d00;
     }
 
     .purple {
         --color: #cccde6;
+        --darkerColor: #571b93;
     }
 
     .pink {
         --color: #ffcfdb;
+        --darkerColor: #ff006e;
+    }
+
+    #fundsFlowGraph {
+        height: calc(100% - 10rem);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mainViz {
+        width: fit-content;
+        height: fit-content;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    select {
+        background-color: transparent;
+        border-radius: 5px;
+        border: solid 2px var(--darkerColor);
+        color: var(--darkerColor);
     }
 
     @keyframes loading {

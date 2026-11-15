@@ -68,10 +68,11 @@ const createAnnualTrendsGraph = (ordinanceData: OrdinanceData[], fundsDict: File
         .y1((d) => y(d[1]));
 
     // Create the SVG annualTrends.
-    const annualTrends = d3
-        .create('svg')
+    const annualTrends = d3.create('svg')
+        .attr('class', 'miniViz')
         .attr('width', width)
-        .attr('height', height);
+        .attr('height', height)
+        .attr('viewBox', `0 0 ${width} ${height}`);
 
     // Add the x-axis.
     annualTrends

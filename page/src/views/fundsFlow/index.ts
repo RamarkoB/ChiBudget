@@ -77,8 +77,10 @@ const graphFundsFlow = (ordinanceData: OrdinanceData[], deptDict: FileDict<Depts
     );
 
     const svg = d3.create('svg')
+        .attr('class', 'mainViz')
         .attr('width', width)
-        .attr('height', height);
+        .attr('height', height)
+        .attr('viewBox', `0 0 ${width} ${height}`);
 
     const sankey = d3Sankey.sankey()
         .nodeId((d) => d.name)
