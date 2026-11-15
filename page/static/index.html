@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html>
     <head>
         <title>Chicago Budget Dashboard</title>
         <meta property="og:type" content="website" />
-        <meta name="Chicago Budget Dashboard" content="A Dashboard for the Chicago Budget" />
+        <meta
+            name="Chicago Budget Dashboard"
+            content="A Dashboard for the Chicago Budget"
+        />
         <meta name="twitter:title" content="Chicago Budget Dashboard" />
         <!-- <meta name="twitter:image" content="assets/img/Logo.png" />
         <meta property="og:image" content="assets/img/Logo.png" />
@@ -64,28 +67,56 @@
 
                 <div id="fundsFlowGraph"></div>
             </div>
+
+            <!-- <div id="donut" class="view"></div> -->
         </main>
 
         <div id="sidebar">
             <div>
-                <input type="radio" name="view" id="annualTrendView" value="annualTrends" checked />
+                <input
+                    type="radio"
+                    name="view"
+                    id="annualTrendView"
+                    value="annualTrends"
+                    checked
+                />
                 <label for="annualTrendView">Annual Trends View</label>
             </div>
 
             <div>
-                <input type="radio" name="view" id="compareView" value="compare" />
+                <input
+                    type="radio"
+                    name="view"
+                    id="compareView"
+                    value="compare"
+                />
                 <label for="compareView">Compare View</label>
             </div>
 
             <div>
-                <input type="radio" name="view" id="deptsListView" value="deptsList" />
+                <input
+                    type="radio"
+                    name="view"
+                    id="deptsListView"
+                    value="deptsList"
+                />
                 <label for="deptsListView">Department List View</label>
             </div>
 
             <div>
-                <input type="radio" name="view" id="fundsFlowView" value="fundsFlow" />
+                <input
+                    type="radio"
+                    name="view"
+                    id="fundsFlowView"
+                    value="fundsFlow"
+                />
                 <label for="fundsFlowView">Funds Flow View</label>
             </div>
+
+            <!-- <div>
+                <input type="radio" name="view" id="donutView" value="donut" />
+                <label for="donut">Donut View</label>
+            </div> -->
         </div>
     </body>
 </html>

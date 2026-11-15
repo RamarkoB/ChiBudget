@@ -3,6 +3,7 @@ import initAnnualTrends from '@/views/annualTrends/index.ts';
 import initCompare from '@/views/compare/index.ts';
 import initDeptTable from '@/views/deptTable/index.ts';
 import initFundsFlow from '@/views/fundsFlow/index.ts';
+import initDonut from '@/views/donut/index.ts';
 
 enum View {
     AnnualTrends = 'annualTrends',
@@ -40,6 +41,9 @@ const main = async () => {
     initCompare(ordinanceData, accountsDict, deptsData, fundsDict);
     initDeptTable(ordinanceData, deptsData);
     initFundsFlow(ordinanceData, deptsDict, fundsDict);
+    initDonut(ordinanceData, fundsDict);
+
+    document.getElementById('loading')?.classList.add('loaded');
 };
 
 main();

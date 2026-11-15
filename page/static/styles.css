@@ -3,6 +3,10 @@
 }
 
 body {
+    margin: 0;
+    padding: 8px;
+    box-sizing: border-box;
+
     display: flex;
     flex-direction: row;
 }
@@ -54,7 +58,8 @@ table {
     border-collapse: collapse;
 }
 
-td, th {
+td,
+th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
@@ -75,4 +80,45 @@ tr:nth-child(odd) {
 
 #deptTableYear {
     margin-bottom: 12px;
+}
+
+#loading {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    pointer-events: none;
+    transition: all 1s ease-in-out;
+
+    display: flex;
+    justify-content: center;
+    overflow-x: clip;
+
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+#loading svg {
+    height: 100%;
+    width: auto;
+}
+
+#loading svg #lines path {
+    stroke-linecap: round;
+    stroke-dasharray: 25%;
+    animation: loading 5s linear reverse infinite;
+}
+
+.loaded {
+    opacity: 0;
+}
+
+@keyframes loading {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: 100%;
+    }
 }
